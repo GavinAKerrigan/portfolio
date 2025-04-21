@@ -10989,10 +10989,6 @@ text-align: center;
   .sameline {
     white-space: nowrap ;
   }
-  button{
-    background-color: rgb(179, 27, 7);
-    color: white;
-  }
   video{
     background-color: black;
     width: 75%;
@@ -11004,36 +11000,6 @@ text-align: center;
   }
   #quest{
     width: 65%;
-  }
-
-  .project-image{
-    border-style: solid;
-    border-color: rgb(179, 27, 7);
-  }
-
-  @media (min-width: 601px) {
-    .project-image{
-      width: 22rem;
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .project-image{
-      width: 1rem;
-    }
-  }
-
-  .project-bullets { 
-    list-style: none; 
-    display: inline; color: 
-    rgb(176, 99, 90);
-  }
-  .project-bullets:after { 
-    content: " \00b7"; 
-  }
-
-  .project-bullets:last-child:after { 
-    content: none; 
   }
 
   .row.row-no-margin {
@@ -11051,3 +11017,45 @@ text-align: center;
     height: auto;
   }
 }
+
+.project-image{
+  border-style: solid;
+  border-color: rgb(179, 27, 7);
+}
+
+@media (min-width: 769px) {
+  .project-image{
+    width: 22rem;
+  }
+  .project-bullets { 
+    list-style: none; 
+    display: inline; 
+    color: rgb(176, 99, 90);
+  }
+  .project-bullets:after { 
+    content: " \00b7"; 
+  }
+  
+  .project-bullets:last-child:after { 
+    content: none; 
+  }
+}
+
+@media (max-width: 768px) {
+  .project-image{
+    width: 100%;
+  }
+}
+
+#other-projects{
+  padding-top: 5rem;
+}
+
+.project-bullets { 
+  color: rgb(176, 99, 90);
+}
+
+  button{
+    background-color: rgb(179, 27, 7);
+    color: white;
+  }

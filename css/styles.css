@@ -11005,4 +11005,43 @@ text-align: center;
   #quest{
     width: 65%;
   }
+  @media (min-width: 601px) {
+    .project-image{
+      width: 22rem;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .project-image{
+      width: 1rem;
+    }
+  }
+
+  .project-bullets { 
+    list-style: none; 
+    display: inline; color: 
+    rgb(176, 99, 90);
+  }
+  .project-bullets:after { 
+    content: " \00b7"; 
+  }
+
+  .project-bullets:last-child:after { 
+    content: none; 
+  }
+
+  .row.row-no-margin {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  
+  .col-no-padding {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .interests-image{
+    width: 50%;
+    height: auto;
+  }
 }

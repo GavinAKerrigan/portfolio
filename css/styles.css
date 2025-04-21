@@ -11005,6 +11005,12 @@ text-align: center;
   #quest{
     width: 65%;
   }
+
+  .project-image{
+    border-style: solid;
+    border-color: rgb(179, 27, 7);
+  }
+
   @media (min-width: 601px) {
     .project-image{
       width: 22rem;

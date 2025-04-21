@@ -10969,53 +10969,29 @@ section.resume-section .resume-section-content {
     padding-top: 5rem;
     padding-bottom: 5rem;
   }
+}
+.fa-cog {
+  color: black;
+}
 
-  .fa-cog {
-    color: black;
-  }
+.col-3{
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
+}
 
-  .col-3{
-    margin-left: 2.5rem;
-    margin-right: 2.5rem;
-  }
-  .d-md-block{
-text-align: center;
-  }
-  .project{
-    width: 100%;
-    height: 100%;
-    border: .25rem solid #000;
-  }
-  .sameline {
-    white-space: nowrap ;
-  }
-  video{
-    background-color: black;
-    width: 75%;
-    display: block;
-    margin: 0 auto;
-  }
-  .video-background{
-    background-color: black;
-  }
-  #quest{
-    width: 65%;
-  }
-
-  .row.row-no-margin {
-    margin-left: 0px;
-    margin-right: 0px;
-  }
-  
-  .col-no-padding {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  .interests-image{
-    width: 50%;
-    height: auto;
-  }
+.project{
+  width: 100%;
+  height: 100%;
+  border: .25rem solid #000;
+}
+video{
+  background-color: black;
+  width: 75%;
+  display: block;
+  margin: 0 auto;
+}
+.video-background{
+  background-color: black;
 }
 
 .project-image{
@@ -11034,6 +11010,9 @@ text-align: center;
   }
   .project-bullets:after { 
     content: " \00b7"; 
+  }
+  .d-md-block{
+    text-align: center;
   }
   
   .project-bullets:last-child:after { 
@@ -11055,7 +11034,47 @@ text-align: center;
   color: rgb(176, 99, 90);
 }
 
-  button{
-    background-color: rgb(179, 27, 7);
-    color: white;
+button{
+  background-color: rgb(179, 27, 7);
+  color: white;
+}
+
+.row.row-no-margin {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.col-no-padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+#interests-image{
+  height: auto;
+  border-style: solid;
+  border-color: rgb(179, 27, 7);
+}
+
+#interests{
+  size: 40px;
+}
+
+#quest{
+  width: 65%;
+}
+
+@media (min-width: 1201px) {
+  #interests-image{
+    width: 60%;
   }
+
+  #interests-image:hover{
+    width: 100%;
+  }
+}
+
+@media (max-width: 1200px) {
+  #interests-image{
+    width: 100%;
+  }
+}

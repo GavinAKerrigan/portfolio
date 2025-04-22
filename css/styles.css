@@ -10984,19 +10984,20 @@ section.resume-section .resume-section-content {
   height: 100%;
   border: .25rem solid #000;
 }
-video{
-  background-color: black;
-  width: 75%;
-  display: block;
-  margin: 0 auto;
-}
-.video-background{
-  background-color: black;
-}
 
 .project-image{
   border-style: solid;
   border-color: rgb(179, 27, 7);
+}
+
+.video-background{
+  background-color: black;
+}
+
+video{
+  width: 75%;
+  display: block;
+  margin: 0 auto;
 }
 
 @media (min-width: 769px) {

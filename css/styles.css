@@ -11053,7 +11053,7 @@ button{
 #interests-image{
   height: auto;
   border-style: solid;
-  border-color: rgb(179, 27, 7);
+  border-color: black;
 }
 
 #interests{
@@ -11078,4 +11078,9 @@ button{
   #interests-image{
     width: 100%;
   }
+}
+
+#carouselButtons{
+  position: relative;
+  margin-top: 25%;
 }

@@ -1,0 +1,188 @@
+/* UI Styles */
+@import url('https://fonts.cdnfonts.com/css/wonder-boy-in-monster-world');
+
+html{
+	background-image: url("../images/background.png"); 
+}
+
+div#gridContainer{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+	z-index: 0; /* underneath everything */
+}
+
+body{
+	margin: auto;
+	width: 70%;
+	padding: 10px;
+	margin-top: 5%;
+}
+
+/* Background Tile Styles */
+span.floor{
+	width:32px;
+	height:32px;
+	background: url(../images/floor.png);
+}
+
+span.wall{
+	width:32px;
+	height:32px;
+	background: url(../images/border.png);
+	background-size: contain;
+}
+
+span.up{
+	width:32px;
+	height:32px;
+	background: url(../images/up.png);
+	background-size: contain;
+}
+
+span.spike{
+	width:32px;
+	height:32px;
+	background: url(../images/spike.png);
+	background-size: contain;
+}
+
+span.water{
+	width:32px;
+	height:32px;
+	background: url(../images/watah.png);
+	background-size: contain;
+}
+
+span.cell{
+	height:32px;
+	width:32px;
+	border: 1px solid #6C6C6C; /* actual width & height is 32px because of border */
+	background-color: #ccc;
+	padding:0;
+	margin:0;
+	position:absolute;
+}
+
+span.cellSelected{
+	height:32px;
+	width:32px;
+	border:0;
+	background-color: red;
+	padding:0;
+	margin:0;
+	position:absolute;
+}
+
+
+/* Game Object Styles */
+span.gameObject{
+	height:32px;
+	width:32px;
+	position:absolute;
+	left: -100px;
+	top: -100px;
+	z-index: 100; /* layered between background tiles and player */
+	background-color:black;
+	background: url(../images/nethack-32x32.png);
+}
+
+span.shield{ 
+	position:absolute;
+	background: url(../images/shield.png);
+	background-size: contain;
+	background-position: -1024px -448px;
+}
+
+span.sword{ 
+	position:absolute;
+	background: url(../images/sword.png);
+	background-size: contain;
+	background-position: -320px -448px;
+}
+
+span.helmet{ 
+	position:absolute;
+	background: url(../images/helemet.png);
+	background-size: contain;
+	background-position: -320px -448px;
+}
+
+span.loot{ 
+	position:absolute;
+	background: url(../images/loot.png);
+	background-size: contain;
+	background-position: -320px -448px;
+}
+
+span.monster1{ 
+	position:absolute;
+	background: url(../images/goblin.png);
+	background-size: contain;
+	z-index: 500; /* layered between other game objects and player */
+	background-position: -96px -32px;
+}
+
+span.monster2{ 
+	position:absolute;
+	background: url(../images/slime.png);
+	background-size: contain;
+	z-index: 500; /* layered between other game objects and player */
+}
+
+span.monster3{ 
+	position:absolute;
+	background: url(../images/witch.png);
+	background-size: contain;
+	z-index: 500; /* layered between other game objects and player */
+}
+
+/* player style */
+span.player{ 
+	background: url(../images/Mage.png);
+	background-size: contain;
+	z-index: 1000; /* On top of everything */
+	transition-property: all;
+	transition-duration: .25s;
+}
+
+div#gridContainer{
+	position:absolute;
+	z-index:-1;
+}
+
+#guide{
+	padding-left: 10px;
+	color: white;
+	background-color: black;
+	font-family: 'Press Start 2P', cursive;
+	display: inline-block;
+	position:absolute;
+	font-size:.78em;
+	top: 0;
+	left:1000px;
+	line-height:1.5em;
+	margin-right: 15%;
+	text-align: center;
+	border-style : solid;
+    border-color: white;
+	margin-left: 15%;
+	margin-top: 5%;
+}
+
+img{
+	width: 100px;
+}
+
+.cyan{
+	color: #00f4ff;
+}
+
+.red{
+	color: #ff0000;
+}
+
+.pink{
+	color: #ff00de;
+}

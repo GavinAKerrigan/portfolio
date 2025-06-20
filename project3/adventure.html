@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Adventure Game</title>
+	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+	<link href="styles/main.css" rel="stylesheet">
+	<!-- <script src="scripts/gamedata.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.8/browser/pixi.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+	<link href="https://fonts.cdnfonts.com/css/wonder-boy-in-monster-world" rel="stylesheet">
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<style>
+		audio{display:none;}
+	</style>
+</head>
+
+<body>
+
+	<div id="guide">
+		<h1>Guide</h1>
+
+		<img src="images/Mage.png" alt="Player">
+		<h2 class="cyan">Explorer</h2>
+		<p class="cyan">Use the arrow keys to move in any direction</p>
+
+		<img src="images/goblin.png" alt="Enemies">
+		<h2 class="red">Enemies</h2>
+		<p class="red">Only move when you move</p>
+
+		<img src="images/shield.png" alt="Treasure">
+		<h2 class="pink">Loot</h2>
+		<p class="pink">Collect pink colored object to beat the stage</p>
+	</div>
+	
+<div id="gridContainer"></div>
+
+<script>
+"use strict";
+const app = new PIXI.Application({
+    width: 962,
+    height: 642,
+	backgroundAlpha: 0
+});
+
+const gameworld = {
+
+world1: [ 
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+]
+
+,world2: [ 
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,1,1,1],
+	[1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1],
+	[1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+	[1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,0,0,0,1,1,3,3,3,3,3,0,0,1,3,3,3,3,3,3,3,3,3,3,3,1],
+	[1,3,0,0,0,0,0,0,1,3,3,3,3,3,3,0,0,1,3,3,3,3,3,3,3,3,3,3,3,1],
+	[1,3,3,0,0,0,0,0,1,3,3,3,3,3,3,0,0,1,1,1,1,1,1,1,1,1,3,3,3,1],
+	[1,3,3,3,0,0,0,0,1,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,1,3,3,3,1],
+	[1,3,3,3,3,0,0,0,1,3,3,3,3,3,3,0,1,0,0,0,0,0,0,0,0,1,3,3,3,1],
+	[1,3,3,3,3,0,0,0,1,1,3,3,3,3,3,1,1,1,0,0,0,0,0,0,0,1,3,3,3,1],
+	[1,3,3,3,3,0,0,0,0,1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,1,3,3,3,1],
+	[1,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,3,3,3,1],
+	[1,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,3,3,3,3,3,3,3,3,3,1],
+	[1,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,3,3,3,3,3,3,3,3,3,1],
+	[1,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,3,3,3,3,3,3,3,3,3,1],
+	[1,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,3,3,3,3,3,3,3,3,1],
+	[1,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,1,0,1,3,3,3,3,3,3,3,3,3,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+]
+
+,world3: [ 
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1],
+	[1,1,1,1,1,1,1,1,1,1,0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1],
+	[1,1,1,1,1,1,1,1,1,1,1,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1],
+	[1,0,0,0,0,0,1,0,0,1,1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1],
+	[1,0,0,1,0,0,1,0,0,0,1,1,1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1],
+	[1,0,0,1,0,0,1,0,0,0,0,1,1,1,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1],
+	[1,0,0,1,0,0,1,0,0,1,0,0,1,1,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,1],
+	[1,0,0,1,0,0,1,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,1],
+	[1,0,0,1,0,0,1,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,1],
+	[1,0,0,1,0,0,1,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,1],
+	[1,0,0,1,0,0,1,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,1],
+	[1,0,0,1,0,0,1,0,0,1,0,0,1,1,1,0,0,0,0,0,0,3,3,3,3,3,3,3,3,1],
+	[1,0,0,1,0,0,0,0,0,1,0,0,0,1,1,1,1,1,1,1,0,0,0,0,3,3,3,3,3,1],
+	[1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,3,3,3,3,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+]
+
+,world4: [ 
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,1,3,3,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,1,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+]
+
+,world5: [ 
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1],
+	[1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+	[1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+	[1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1],
+	[1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+	[1,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+	[1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+	[1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1],
+	[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1],
+	[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+]
+};
+
+
+// these map to the CSS classes in main.css
+const cssClass = Object.freeze({
+CHEST1: 	"chest1",
+SHIELD: 	"shield",
+MONSTER1: 	"monster1",
+MONSTER2: 	"monster2",
+MONSTER3: 	"monster3",
+PLAYER: 	"player",
+SWORD: 		"sword",
+HELMET: 	"helmet",
+LOOT: 		"loot"
+});
+
+const allGameObjects = {
+// we aren't using .type yet
+level1:[]
+
+,level2:[
+	{x:11, y:2,  type:"shield",		className: cssClass.SHIELD},
+	{x:10, y:18, type:"monster", 	className: cssClass.MONSTER1},
+	{x:12, y:16, type:"monster",	className: cssClass.MONSTER1},
+	{x:24, y:1, type:"monster",		className: cssClass.MONSTER1},
+	{x:12, y:2, type:"monster",		className: cssClass.MONSTER1},
+	{x:15, y:6, type:"monster",		className: cssClass.MONSTER1},
+	{x:16, y:4, type:"monster",		className: cssClass.MONSTER1},
+	{x:16, y:13, type:"monster",	className: cssClass.MONSTER2},
+	{x:16, y:15, type:"monster",	className: cssClass.MONSTER2},
+	{x:16, y:17, type:"monster",	className: cssClass.MONSTER2},
+	{x:19, y:9, type:"monster",		className: cssClass.MONSTER2},
+	{x:21, y:11, type:"monster",	className: cssClass.MONSTER2},
+	{x:6, y:9,  type:"monster",		className: cssClass.MONSTER3}
+]
+
+,level3:[
+	{x:1, y:14, type:"sword",		className: cssClass.SWORD},
+	{x:4, y:6, type:"monster", 		className: cssClass.MONSTER1},
+	{x:5, y:8, type:"monster",		className: cssClass.MONSTER1},
+	{x:7, y:5, type:"monster", 		className: cssClass.MONSTER1},
+	{x:8, y:7, type:"monster",		className: cssClass.MONSTER1},
+	{x:1, y:5, type:"monster", 		className: cssClass.MONSTER1},
+	{x:2, y:8, type:"monster",		className: cssClass.MONSTER1},
+	{x:10, y:8, type:"monster", 	className: cssClass.MONSTER1},
+	{x:10, y:15, type:"monster",	className: cssClass.MONSTER2},
+	{x:20, y:9, type:"monster",		className: cssClass.MONSTER2},
+	{x:20, y:11, type:"monster",	className: cssClass.MONSTER2},
+	{x:21, y:16, type:"monster",	className: cssClass.MONSTER2},
+	{x:21, y:18, type:"monster",	className: cssClass.MONSTER2},
+	{x:20, y:13,  type:"monster",	className: cssClass.MONSTER3},
+	{x:11, y:14,  type:"monster",	className: cssClass.MONSTER3},
+	{x:11, y:3,  type:"monster",	className: cssClass.MONSTER3}
+]
+
+,level4:[
+	{x:26, y:17,  type:"helemet",className: cssClass.HELMET},
+	{x:11, y:16, type:"monster", 	className: cssClass.MONSTER1},
+	{x:12, y:16, type:"monster", 	className: cssClass.MONSTER1},
+	{x:13, y:18, type:"monster", 	className: cssClass.MONSTER1},
+	{x:14, y:18, type:"monster", 	className: cssClass.MONSTER1},
+	{x:11, y:4, type:"monster", 	className: cssClass.MONSTER1},
+	{x:12, y:4, type:"monster", 	className: cssClass.MONSTER1},
+	{x:13, y:6, type:"monster", 	className: cssClass.MONSTER1},
+	{x:14, y:6, type:"monster", 	className: cssClass.MONSTER1},
+	{x:25, y:1, type:"monster", 	className: cssClass.MONSTER1},
+	{x:26, y:3, type:"monster", 	className: cssClass.MONSTER1},
+	{x:27, y:5, type:"monster", 	className: cssClass.MONSTER1},
+	{x:28, y:7, type:"monster", 	className: cssClass.MONSTER1},
+	{x:4, y:6, type:"monster", 	className: cssClass.MONSTER1},
+	{x:4, y:6, type:"monster", 	className: cssClass.MONSTER1},
+	{x:4, y:6, type:"monster", 	className: cssClass.MONSTER1},
+	{x:4, y:6, type:"monster", 	className: cssClass.MONSTER1},
+	{x:2, y:3, type:"monster",	className: cssClass.MONSTER2},
+	{x:3, y:7, type:"monster",	className: cssClass.MONSTER2},
+	{x:3, y:8, type:"monster",	className: cssClass.MONSTER2},
+	{x:4, y:14, type:"monster",	className: cssClass.MONSTER2},
+	{x:5, y:17, type:"monster",	className: cssClass.MONSTER2},
+	{x:5, y:18, type:"monster",	className: cssClass.MONSTER2},
+	{x:23, y:1, type:"monster",	className: cssClass.MONSTER2},
+	{x:25, y:3, type:"monster",	className: cssClass.MONSTER2},
+	{x:23, y:5, type:"monster",	className: cssClass.MONSTER2},
+	{x:25, y:7, type:"monster",	className: cssClass.MONSTER2},
+	{x:23, y:9, type:"monster",	className: cssClass.MONSTER2},
+	{x:25, y:5, type:"monster",	className: cssClass.MONSTER2},
+	{x:25, y:16, type:"monster",	className: cssClass.MONSTER2},
+	{x:26, y:13, type:"monster",	className: cssClass.MONSTER2},
+	{x:27, y:11, type:"monster",	className: cssClass.MONSTER2},
+	{x:17, y:5,  type:"monster",	className: cssClass.MONSTER3},
+	{x:13, y:11,  type:"monster",	className: cssClass.MONSTER3}
+]
+
+,level5:[
+	{x:28, y:18, type:"loot",		className: cssClass.LOOT},
+	{x:27, y:1, type:"monster", 	className: cssClass.MONSTER1},
+	{x:28, y:3, type:"monster",		className: cssClass.MONSTER1},
+	{x:12, y:5, type:"monster",		className: cssClass.MONSTER1},
+	{x:8,  y:5, type:"monster",		className: cssClass.MONSTER1},
+	{x:10, y:5, type:"monster",		className: cssClass.MONSTER1},
+	{x:27, y:9, type:"monster",		className: cssClass.MONSTER1},
+	{x:2,  y:12, type:"monster", 	className: cssClass.MONSTER1},
+	{x:6,  y:16, type:"monster", 	className: cssClass.MONSTER1},
+	{x:9,  y:16, type:"monster", 	className: cssClass.MONSTER1},
+	{x:15,  y:16, type:"monster", 	className: cssClass.MONSTER1},
+	{x:18,  y:16, type:"monster", 	className: cssClass.MONSTER1},
+	{x:20,  y:16, type:"monster", 	className: cssClass.MONSTER1},
+	{x:25,  y:17, type:"monster", 	className: cssClass.MONSTER1},
+	{x:14, y:3, type:"monster",		className: cssClass.MONSTER2},
+	{x:14, y:2, type:"monster",		className: cssClass.MONSTER2},
+	{x:8,  y:1, type:"monster",		className: cssClass.MONSTER2},
+	{x:16, y:2, type:"monster",		className: cssClass.MONSTER2},
+	{x:8,  y:6, type:"monster",		className: cssClass.MONSTER2},
+	{x:16, y:3, type:"monster",		className: cssClass.MONSTER2},
+	{x:23, y:6, type:"monster",		className: cssClass.MONSTER2},
+	{x:16, y:7, type:"monster",		className: cssClass.MONSTER2},
+	{x:21, y:10,type:"monster",		className: cssClass.MONSTER2},
+	{x:16, y:9, type:"monster",		className: cssClass.MONSTER2},
+	{x:16, y:12, type:"monster",	className: cssClass.MONSTER2},
+	{x:8,  y:12, type:"monster",	className: cssClass.MONSTER2},
+	{x:6,  y:14, type:"monster",	className: cssClass.MONSTER2},
+	{x:24, y:18, type:"monster",	className: cssClass.MONSTER2},
+	{x:18, y:6,  type:"monster",	className: cssClass.MONSTER3},
+	{x:19, y:14, type:"monster",	className: cssClass.MONSTER3},
+	{x:13, y:14, type:"monster",	className: cssClass.MONSTER3},
+	{x:5,  y:13, type:"monster",	className: cssClass.MONSTER3},
+	{x:28, y:4,  type:"monster",	className: cssClass.MONSTER3},
+	{x:6,  y:7,  type:"monster",	className: cssClass.MONSTER3},
+]
+}
+
+document.body.appendChild(app.view);
+
+let startScene;
+let storyScene;
+let endScreen;
+
+const direction = [true, true, true, true, true, true, true, 
+true, true, true, true, true, true, true, true, true, true, true, true, true
+, true, true, true, true, true, true, true, true, true, true, true, true
+, true, true, true, true, true, true, true, true, true, true, true, true];
+
+let stage;
+
+app.loader.onComplete.add(pixiSetup);
+
+// I. VARIABLES
+const cellWidth = 32; 
+const cellSpacing = 0;
+const container = document.querySelector("#gridContainer");
+const cells = []; // the HTML elements - our "view"
+
+// faking an enumeration here
+const keyboard = Object.freeze({
+	SHIFT: 		16,
+	SPACE: 		32,
+	LEFT: 		37, 
+	UP: 		38, 
+	RIGHT: 		39, 
+	DOWN: 		40
+});
+
+// this is an enumeration for gameworld levels
+const worldTile = Object.freeze({
+	FLOOR: 		0,
+	WALL: 		1,
+	UP: 		2,
+	WATER: 		3,
+	SPIKE: 		4
+});
+
+//PIXI
+function createText() {
+	let buttonStyle = new PIXI.TextStyle({
+        fill: 0xFF0000,
+        fontSize: 30,
+        fontFamily: "Press Start 2P"
+    });
+
+	//Start scene text
+	let title = new PIXI.Text("Quest of the Hero's Tomb");
+    title.style = new PIXI.TextStyle({
+        fill: 0x00FFFF,
+        fontSize: 35, 
+        fontFamily: "Press Start 2P",
+    });
+    title.x = 65;
+    title.y = 200;
+	title.z = 1000;
+    startScene.addChild(title);
+
+	let startButton = new PIXI.Text("QUEST A");
+    startButton.style = buttonStyle;
+    startButton.x = 180;
+    startButton.y = 400;
+    startButton.interactive = true;
+    startButton.buttonMode = true;
+    startButton.on("pointerup", startGame); // startGame is a function reference
+    startButton.on('pointerover', e => e.target.alpha = 0.7); // concise arrow function with no brackets
+    startButton.on('pointerout', e => e.currentTarget.alpha = 1.0); // ditto
+    startScene.addChild(startButton);
+
+	let startButton2 = new PIXI.Text("QUEST B");
+    startButton2.style = buttonStyle;
+    startButton2.x = 180;
+    startButton2.y = 500;
+    startButton2.interactive = true;
+    startButton2.buttonMode = true;
+	startButton2.on("pointerup", levelB);
+    startButton2.on("pointerup", startGame); // startGame is a function reference
+    startButton2.on('pointerover', e => e.target.alpha = 0.7); // concise arrow function with no brackets
+    startButton2.on('pointerout', e => e.currentTarget.alpha = 1.0); // ditto
+    startScene.addChild(startButton2);
+
+	let startButton3 = new PIXI.Text("QUEST C");
+    startButton3.style = buttonStyle;
+    startButton3.x = 580;
+    startButton3.y = 400;
+    startButton3.interactive = true;
+    startButton3.buttonMode = true;
+	startButton3.on("pointerup", levelC);
+    startButton3.on("pointerup", startGame); // startGame is a function reference
+    startButton3.on('pointerover', e => e.target.alpha = 0.7); // concise arrow function with no brackets
+    startButton3.on('pointerout', e => e.currentTarget.alpha = 1.0); // ditto
+    startScene.addChild(startButton3);
+
+	let startButton4 = new PIXI.Text("QUEST D");
+    startButton4.style = buttonStyle;
+    startButton4.x = 580;
+    startButton4.y = 500;
+    startButton4.interactive = true;
+    startButton4.buttonMode = true;
+	startButton4.on("pointerup", levelD);
+    startButton4.on("pointerup", startGame); // startGame is a function reference
+    startButton4.on('pointerover', e => e.target.alpha = 0.7); // concise arrow function with no brackets
+    startButton4.on('pointerout', e => e.currentTarget.alpha = 1.0); // ditto
+    startScene.addChild(startButton4);
+
+	let storyButton = new PIXI.Text("STORY");
+    storyButton.style = buttonStyle;
+    storyButton.x = 410;
+    storyButton.y = 350;
+    storyButton.interactive = true;
+    storyButton.buttonMode = true;
+    storyButton.on("pointerup", story); // startGame is a function reference
+    storyButton.on('pointerover', e => e.target.alpha = 0.7); // concise arrow function with no brackets
+    storyButton.on('pointerout', e => e.currentTarget.alpha = 1.0); // ditto
+    startScene.addChild(storyButton);
+
+	//Story scene text
+	let storyText1 = new PIXI.Text("You are a brave explorer who must go on a quest ");
+    storyText1.style = new PIXI.TextStyle({
+        fill: 0x00FFFF,
+        fontSize: 15, 
+        fontFamily: "Press Start 2P",
+    });
+	storyText1.x = 128;
+	storyText1.y = 100;
+	storyScene.addChild(storyText1);
+
+	let storyText2 = new PIXI.Text("to gather a mystic item from one of the four heros tombs:");
+    storyText2.style = new PIXI.TextStyle({
+        fill: 0x00FFFF,
+        fontSize: 15, 
+        fontFamily: "Press Start 2P",
+    });
+	storyText2.x = 55;
+	storyText2.y = 150;
+	storyScene.addChild(storyText2);
+
+	let storyText3 = new PIXI.Text("Alexendaria's Shield, Beowulf's Blade,");
+    storyText3.style = new PIXI.TextStyle({
+        fill: 0x00FFFF,
+        fontSize: 15, 
+        fontFamily: "Press Start 2P",
+    });
+	storyText3.x = 200;
+	storyText3.y = 200;
+	storyScene.addChild(storyText3);
+
+	let storyText4 = new PIXI.Text("Cu Chulainn's Helemet, or Dionysus's Loot");
+    storyText4.style = new PIXI.TextStyle({
+        fill: 0x00FFFF,
+        fontSize: 15, 
+        fontFamily: "Press Start 2P",
+    });
+	storyText4.x = 175;
+	storyText4.y = 250;
+	storyScene.addChild(storyText4);
+
+	let storyText5 = new PIXI.Text("Pick a quest and venture forth!");
+    storyText5.style = new PIXI.TextStyle({
+        fill: 0x00FFFF,
+        fontSize: 15, 
+        fontFamily: "Press Start 2P",
+    });
+	storyText5.x = 250;
+	storyText5.y = 300;
+	storyScene.addChild(storyText5);
+
+	let storyText6 = new PIXI.Text("Will you become the Bravest Hero?");
+    storyText6.style = new PIXI.TextStyle({
+        fill: 0x00FFFF,
+        fontSize: 15, 
+        fontFamily: "Press Start 2P",
+    });
+	storyText6.x = 235;
+	storyText6.y = 350;
+	storyScene.addChild(storyText6);
+
+	let backButton = new PIXI.Text("BACK");
+    backButton.style = buttonStyle;
+    backButton.x = 425;
+    backButton.y = 500;
+    backButton.interactive = true;
+    backButton.buttonMode = true;
+    backButton.on("pointerup", storyToStart); // startGame is a function reference
+    backButton.on('pointerover', e => e.target.alpha = 0.7); // concise arrow function with no brackets
+    backButton.on('pointerout', e => e.currentTarget.alpha = 1.0); // ditto
+    storyScene.addChild(backButton);
+
+	//End scene text
+	let win = new PIXI.Text("YOU ARE THE BRAVE HERO!");
+    win.style = new PIXI.TextStyle({
+        fill: 0x00FFFF,
+        fontSize: 38, 
+        fontFamily: "Press Start 2P",
+		stroke: 0x000000,
+        strokeThickness: 10
+    });
+    win.x = 42;
+    win.y = 275;
+    endScreen.addChild(win);
+}
+
+function story(){
+	storyScene.visible = true;
+	startScene.visible = false;
+}
+function storyToStart(){
+	storyScene.visible = false;
+	startScene.visible = true;
+}
+
+function startGame(){
+	startScene.visible = false;
+	loadLevel();
+	app.visible = false;
+	dungeonMusic.play();
+
+	nextLevel();
+}
+
+function levelB(){
+	currentLevelNumber = 2;
+}
+function levelC(){
+	currentLevelNumber = 3;
+}
+function levelD(){
+	currentLevelNumber = 4;
+}
+
+function nextLevel(){
+	currentLevelNumber++;
+	
+	//End screen
+	if(currentLevelNumber == 6){
+		endScreen.visible = true;
+		victoryMusic.play();
+		dungeonMusic.pause();
+	}
+
+	currentGameWorld = gameworld["world" + currentLevelNumber];
+	let numCols = currentGameWorld[0].length;
+	let numRows = currentGameWorld.length;
+	createGridElements(numRows,numCols);
+	drawGrid(currentGameWorld);
+	loadLevel();
+	drawGameObjects(currentGameObjects);
+}
+
+// the "grunt" sound that plays when the player attempts to move into a wall or water square
+let hitAudio = new Audio("sounds/bang_1.wav");
+hitAudio.volume = 0.2;
+
+let yellAudio = new Audio("sounds/yellbit.wav");
+yellAudio.volume = 0.3;
+
+let dungeonMusic = new Audio("sounds/Dungeon King full mp.mp3")
+dungeonMusic.loop = true;
+dungeonMusic.volume = 0.3;
+
+let victoryMusic = new Audio("sounds/Victory!.wav");
+dungeonMusic.volume = 0.3;
+
+// level data is over in gamedata.js
+let currentLevelNumber = 1;
+let currentGameWorld = undefined;   // a 2D array - the grid:  walls, floors, water, etc...
+let currentGameObjects = undefined; // a 1D array - stuff that's on top of the grid and can move: monsters, treasure, keys, etc...
+
+// the player - uses ES6 object literal syntax
+const player = Object.seal({
+	x:-1,
+	y:-1,
+	element: undefined,
+	moveRight(){this.x++;},
+	moveDown(){this.y++;},
+	moveLeft(){this.x--;},
+	moveUp(){this.y--;},
+});
+
+function pixiSetup(){
+	stage = app.stage;
+	startScene = new PIXI.Container();
+	stage.addChild(startScene);
+
+	storyScene = new PIXI.Container();
+	stage.addChild(storyScene);
+
+	endScreen = new PIXI.Container();
+	stage.addChild(endScreen);
+	endScreen.visible = false;
+	storyScene.visible = false;
+
+	createText();
+}
+
+function gameEnd(){
+	
+}
+
+// II. INIT code
+window.onload = ()=>{
+	currentGameWorld = gameworld["world" + currentLevelNumber];
+	let numCols = currentGameWorld[0].length;
+	let numRows = currentGameWorld.length;
+	createGridElements(numRows,numCols);
+	drawGrid(currentGameWorld);
+	loadLevel(currentLevelNumber);
+	drawGameObjects(currentGameObjects);
+	setupEvents();
+	pixiSetup();
+}
+
+
+// III. FUNCTIONS
+// the elements on the screen that won't change - our "view"
+function createGridElements(numRows,numCols){
+	const span = document.createElement('span');
+	span.className = 'cell';
+	for (let row=0;row<numRows;row++){
+	cells.push([]);
+		for (let col=0;col<numCols;col++){
+			let cell = span.cloneNode();
+			cell.style.left = `${col * (cellWidth+cellSpacing)}px`;
+			cell.style.top = `${row * (cellWidth+cellSpacing)}px`;
+			container.appendChild(cell);
+			cells[row][col] = cell;
+		}
+	}
+}
+
+// the elements on the screen that can move and change - also part of the "view"
+function loadLevel(){
+	currentGameObjects = []; // clear out the old array
+	const node =  document.createElement("span");
+	node.className = "gameObject";
+
+	// now initialize our player
+	player.x = 1;
+	player.y = 1;
+	player.element = node.cloneNode(true);
+	player.element.classList.add("player");
+	container.appendChild(player.element);
+	
+	
+	/* let's instantiate our game objects */
+	// pull the current level data
+	const levelObjects = allGameObjects["level" + currentLevelNumber];
+	
+	// loop through this level's objects ... 
+	for (let obj of levelObjects){
+		const clone = Object.assign({}, obj); 		// clone the object
+		clone.element = node.cloneNode(true); 		// clone the element
+		clone.element.classList.add(obj.className); // add the className so we see the right image
+		currentGameObjects.push(clone);				// add to currentGameObjects array  (so it gets moved onto the map)
+		container.appendChild(clone.element);		// add to DOM tree (so we can see it!)
+	}
+}
+
+function drawGrid(array){
+	currentGameObjects = []; // clear out the old array
+	const numCols = array[0].length;
+	const numRows = array.length;
+	for (let row=0;row<numRows;row++){
+		for (let col=0;col<numCols;col++){
+			const tile = array[row][col];
+			const element = cells[row][col];
+			
+			// ** can you figure our how to get rid of this switch? Maybe another enumeration, of the tile CSS classes? **
+			switch(tile) {
+    			case worldTile.FLOOR:
+        		element.classList.add("floor")
+        		break;
+        		
+        		case worldTile.WALL:
+        		element.classList.add("wall");
+        		break;
+        		
+        		case worldTile.UP:
+        		element.classList.add("up");
+        		break;
+        		
+        		case worldTile.WATER:
+        		element.classList.add("water");
+        		break;
+        		
+        		case worldTile.SPIKE:
+        		element.classList.add("spike");
+        		break;
+			}
+		}
+	}
+}
+
+
+function drawGameObjects(array){
+	// player
+	if(currentLevelNumber != 1){
+		player.element.style.left = `${player.x * (cellWidth + cellSpacing)}px`;
+		player.element.style.top = `${player.y * (cellWidth + cellSpacing)}px`;
+	// game object
+	for (let gameObject of array){
+		gameObject.element.style.left = `${gameObject.x * (cellWidth + cellSpacing)}px`;
+		gameObject.element.style.top = `${gameObject.y * (cellWidth + cellSpacing)}px`;
+	}
+	}
+}
+
+function movePlayer(e){
+	let nextX;
+	let nextY;
+	//Everytime the player moves so do the monsters
+	switch(e.keyCode){
+		case keyboard.RIGHT:
+		nextX = player.x + 1;
+			nextY = player.y;
+			if(checkIsLegalMove(nextX,nextY)){
+				moveEnemies();
+				player.moveRight();
+			}
+			else{
+				hitAudio.play();
+			}
+		break;
+		
+		case keyboard.DOWN:
+		nextX = player.x;
+			nextY = player.y + 1;
+			if(checkIsLegalMove(nextX,nextY)){
+				moveEnemies();
+				player.moveDown();
+			}
+			else{
+				hitAudio.play();
+			}
+		break;
+		
+		case keyboard.LEFT:
+		nextX = player.x - 1;
+			nextY = player.y;
+			if(checkIsLegalMove(nextX,nextY)){
+				moveEnemies();
+				player.moveLeft();
+			}
+			else{
+				hitAudio.play();
+			}
+		break;
+		
+		case keyboard.UP:
+		nextX = player.x;
+			nextY = player.y - 1;
+			if(checkIsLegalMove(nextX,nextY)){
+				moveEnemies();
+				player.moveUp();
+			}
+			else{
+				hitAudio.play();
+			}
+		break;
+	}
+}
+
+function checkIsLegalMove(nextX,nextY){
+		let nextTile = currentGameWorld[nextY][nextX];
+		if (nextTile != worldTile.WALL && nextTile != worldTile.WATER){
+			return true;
+		} else{
+			return false;
+		}
+	}
+
+//Enemy code
+function moveEnemies(){
+	for(let i = 1; i < currentGameObjects.length; i++){
+
+		//For Monster 1
+		if(currentGameObjects[i].className == cssClass.MONSTER1){
+
+			if(checkIsLegalMove(currentGameObjects[i].x, currentGameObjects[i].y - 1) == false){
+				direction[i] = true;
+			}
+			else if(checkIsLegalMove(currentGameObjects[i].x, currentGameObjects[i].y + 1) == false){
+				direction[i] = false;
+			}
+
+			if(direction[i] == false){
+				currentGameObjects[i].y -= 1;
+			}
+			else if(direction[i] == true){
+				currentGameObjects[i].y += 1;
+			}
+		}
+
+		//For Monster 2
+		if(currentGameObjects[i].className == cssClass.MONSTER2){
+
+			if(checkIsLegalMove(currentGameObjects[i].x - 1, currentGameObjects[i].y) == false){
+				direction[i] = true;
+			}
+			else if(checkIsLegalMove(currentGameObjects[i].x + 1, currentGameObjects[i].y) == false){
+				direction[i] = false;
+			}
+
+			if(direction[i] == false){
+				currentGameObjects[i].x -= 1;
+			}
+			else if(direction[i] == true){
+				currentGameObjects[i].x += 1;
+			}
+		}
+
+		//For Monster 3
+		if(currentGameObjects[i].className == cssClass.MONSTER3){
+
+			if(checkIsLegalMove(currentGameObjects[i].x - 1, currentGameObjects[i].y - 1) == false){
+				direction[i] = true;
+			}
+			else if(checkIsLegalMove(currentGameObjects[i].x + 1, currentGameObjects[i].y + 1) == false){
+				direction[i] = false;
+			}
+
+			if(direction[i] == false){
+				currentGameObjects[i].x -= 1;
+				currentGameObjects[i].y -= 1;
+			}
+			else if(direction[i] == true){
+				currentGameObjects[i].x += 1;
+				currentGameObjects[i].y += 1;
+			}
+		}
+	}
+}
+
+//Collision between enemies and player
+function ePCollision(){
+	for(let i = 1; i < currentGameObjects.length; i++){
+			if(intersects(player, currentGameObjects[i]) == true){
+			player.x = 1;
+			player.y = 1;
+
+			yellAudio.play();
+
+			if(currentGameObjects[i].x == 1 &&
+			currentGameObjects[i].y == 1){
+				currentGameObjects[i].x = -3
+				currentGameObjects[i].y = -3
+			}
+		}
+	}
+}
+
+//Collision between special tiles and player
+function specialTilePlayerCollision(){
+	let playerPosition = currentGameWorld[player.x][player.y];
+		if (playerPosition == worldTile.SPIKE){
+			player.x = 1;
+			player.y = 1;
+
+			yellAudio.play();
+		}
+}
+//Exit level
+function reachedExit(){
+	if(intersects(player, currentGameObjects[0]) == true){
+		currentLevelNumber = 5;
+		nextLevel();
+	}
+}
+
+//Collision Manager
+function intersects(a, b){
+	if(a.x == b.x && a.y == b.y){
+		return true;
+	}
+}
+
+// IV. EVENTS
+function setupEvents(){
+	// fireballSound = new Howl({
+	//     src: ["sounds/flame.ogg"]
+    // });
+
+	window.onmouseup = (e) => {
+		e.preventDefault();
+		gridClicked(e);
+	};
+	
+	window.onkeydown = (e)=>{
+		//console.log("keydown=" + e.keyCode);
+
+		// checking for other keys - ex. 'p' and 'P' for pausing
+		var char = String.fromCharCode(e.keyCode);
+		if (char == "p" || char == "P"){
+		
+		}
+		movePlayer(e);
+		drawGameObjects(currentGameObjects);
+		reachedExit();
+		ePCollision();
+		specialTilePlayerCollision();
+	};
+}
+
+function gridClicked(e){
+	let rect = container.getBoundingClientRect();
+	let mouseX = e.clientX - rect.x;
+	let mouseY = e.clientY - rect.y;
+	let columnWidth = cellWidth+cellSpacing;
+	let col = Math.floor(mouseX/columnWidth);
+	let row = Math.floor(mouseY/columnWidth);
+	let selectedCell = cells[row][col];
+	//selectedCell.classList.add('cellSelected');
+	console.log(`${col},${row}`);
+}
+</script>
+
+</body>
+</html>

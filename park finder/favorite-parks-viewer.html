@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>HW-4 - NY State Park Buddy!</title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=yes">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+	<script src="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js"></script>
+	<link href="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="styles/default-styles.css">
+	<script src="./src/favorite.js" type="module"></script>
+</head>
+<body>
+  <header>
+    <div class="has-background-success p-2 has-text-centered ml-6 mr-6">
+      <div class="column is-small is-success">
+        <h1 class="title has-text-light">Favorite Parks Viewer</h1>
+        <h2 class="subtitle has-text-light">See which parks are the most favorited!</h2>
+      </div>
+    </div>
+  </header> 
+    <div class="has-background-success p-2 has-text-centered mt-3 ml-6 mr-6">
+		<div class="column is-small is-success">
+			<h2 class="subtitle"><u>INCREMENT/DECREMENT A PARK COUNT (FOR TESTING ONLY)</u></h2>
+            <b class="has-text-light">PARK ID:</b>
+            <input id="input-id" type="text"></input>
+            <button id="send-btn">Send Park ID to Server</button>
+            <input type="checkbox" id="decrement"><b class="has-text-light"> Decrement</b></input>
+		</div>
+    </div>
+    <div class="has-background-success p-1 has-text-centered	mt-3 ml-6 mr-6">
+		  <div class="column is-small is-success">
+			  <h2 class="subtitle"><u>View Popularity</u></h1>
+          <ul class="has-text-light">
+            <p id="favorite-list"></p>
+          </ul>
+		    </div>
+      </div>
+  </body>
+</html>
